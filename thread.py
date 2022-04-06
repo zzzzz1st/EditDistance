@@ -8,8 +8,8 @@ def jaccard_coef(label1, label2):
 
 
 # Crea un set di ngrams fatti da 3 lettere
-def query_set_maker(query):
-    return set(ngrams(query, 3))
+def query_set_maker(query, ngram):
+    return set(ngrams(query, ngram))
 
 
 # Calcolatore del coefficiente di jaccard che è un thread.
@@ -20,12 +20,13 @@ def letters(inputstring):
 
 
 class JaccardCalculator(threading.Thread):
-    def __init__(self, thread_id, name, query, lexicon):
+    def __init__(self, thread_id, name, query, linesarray, ngram):
         threading.Thread.__init__(self)
         self.thread_id = thread_id
         self.name = name
-        self.lexicon = lexicon
-        self.query = query_set_maker(query)
+        self.linesarray = linesarray
+        self.ngram = ngram
+        self.query = query_set_maker(query, ngram)
         # Array di massimi coefficienti
         self.top3 = [0.0, 0.0, 0.0]
         # Array di parole
@@ -37,27 +38,19 @@ class JaccardCalculator(threading.Thread):
             ngramstrings.append(letters(element))
         dojaccardcalculations = False
         print("Starting " + self.name)
-        f = open(self.lexicon, "r")
-        while True:
-            line = f.readline()
-            if not line:
-                break
-            else:
-                line = line.rstrip("\n")
-                # Vede se esste un ngram nella parola di lessico. Altrimenti non fa i calcoli.
-                if any(word in line for word in ngramstrings):
-                    line_set = set(ngrams(line, 3))
-                    # Calcola il coefficiente jaccard tra query e una parola
-                    jc = jaccard_coef(self.query, line_set)
-                    if jc > self.top3[0]:
-                        self.top3[0] = jc
-                        self.similar_words[0] = line
-                    elif jc > self.top3[1]:
-                        self.top3[1] = jc
-                        self.similar_words[1] = line
-                    elif jc > self.top3[2]:
-                        self.top3[2] = jc
-                        self.similar_words[2] = line
-
-        f.close()
+        for line in self.linesarray:
+            # Vede se esiste un ngram nella parola di lessico. Altrimenti non fa i calcoli.
+            if any(word in line for word in ngramstrings):
+                line_set = set(ngrams(line, self.ngram))
+                # Calcola il coefficiente jaccard tra query e una parola
+                jc = jaccard_coef(self.query, line_set)
+                if jc > self.top3[0]:
+                    self.top3[0] = jc
+                    self.similar_words[0] = line
+                elif jc > self.top3[1]:
+                    self.top3[1] = jc
+                    self.similar_words[1] = line
+                elif jc > self.top3[2]:
+                    self.top3[2] = jc
+                    self.similar_words[2] = line
         print("Exiting " + self.name)
