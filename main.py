@@ -1,8 +1,11 @@
 from thread import JaccardCalculator
 from edit_distance import editDistDP
 import time
+
+# Facciamo partire 6 thread su 6 file diversi. Poi raggruppiamo tutti i risultati.
+# Una volta finito questo stampiamo le ultime 3 parole più vicine a query iniziale.
 start_time = time.time()
-query = "andiamo"
+query = "conigl"
 coef = [0, 0, 0]
 words = ["", "", ""]
 distance = [0, 0, 0]
@@ -53,7 +56,7 @@ print(f'''
 
         Word : {words[0]} 
         with Jaccard Coefficient : --- {coef[0]} --- has the minimum distance : {distance[0]}
-      
+
         Word : {words[1]} 
         with Jaccard Coefficient : --- {coef[1]} --- has the distance : {distance[1]}
 
