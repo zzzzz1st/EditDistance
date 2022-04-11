@@ -25,15 +25,15 @@ def printOutput(ngram, words, coef, distance, spent):
             {ngram}Grams !!
 
             Word : {words[0]} 
-            with Jaccard Coefficient : --- {coef[0]} --- has the minimum distance : {distance[0]}
+            with Jaccard Coefficient : --- {round(coef[0], 2)} --- has the minimum distance : {distance[0]}
 
             Word : {words[1]} 
-            with Jaccard Coefficient : --- {coef[1]} --- has the distance : {distance[1]}
+            with Jaccard Coefficient : --- {round(coef[1], 2)} --- has the distance : {distance[1]}
 
             Word : {words[2]} 
-            with Jaccard Coefficient : --- {coef[2]} --- has the distance : {distance[2]}
+            with Jaccard Coefficient : --- {round(coef[2], 2)} --- has the distance : {distance[2]}
 
-            Spent time : {str(spent)}''')
+            Spent time : {str(round(spent, 2))}''')
     print("-------------------------------------------------------------------------------")
 
 
@@ -57,7 +57,7 @@ def editDistanceAnalysis():
 
                 Word : {similar_word} --- has the minimum distance : {minDist}
                 
-                Spent time : {str(after - before)}
+                Spent time : {str(round(after - before, 2))}
     ''')
     print("-------------------------------------------------------------------------------")
 
